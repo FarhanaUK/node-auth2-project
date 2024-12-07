@@ -40,6 +40,18 @@ const checkUsernameExists = (req, res, next) => {
       "message": "Invalid credentials"
     }
   */
+ const username = req.body.username
+ if(!username){
+  try{
+res.status(401).json({
+  message: "Invalid credentials"
+})
+  }
+  catch(err){
+    next(err)
+  }
+ }
+ next()
 }
 
 
@@ -62,7 +74,27 @@ const validateRoleName = (req, res, next) => {
       "message": "Role name can not be longer than 32 chars"
     }
   */
-}
+ const roleName = req.body.role_name
+
+ if(!roleName || !roleName.trim()){
+  req.role_name = 'student'
+ next()
+ }
+ else if(roleName.trim() === 'admin'){
+next({ status: 422, message: "Role name can not be admin"})
+ }
+ else if(roleName.trim().length > 32){
+  next({ status: 422, message: "Role name can not be longer than 32 chars"})
+ }
+ else{
+  req.role_name = req.body.role_name.trim()
+  next()
+ }
+
+  
+ }
+
+
 
 module.exports = {
   restricted,
