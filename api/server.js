@@ -11,6 +11,10 @@ server.use(helmet());
 server.use(express.json());
 server.use(cors());
 
+server.get("/", (req, res) => {
+  res.send("Welcome to the API server! It is running.");
+});
+
 server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter);
 
